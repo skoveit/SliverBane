@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/lang-Go-00ADD8?style=flat-square&logo=go" />
   <img src="https://img.shields.io/badge/target-Sliver%20C2-red?style=flat-square" />
-  <img src="https://img.shields.io/badge/purpose-Blue%20Team-0078D4?style=flat-square" />
+  <img src="https://img.shields.io/badge/purpose-Red%20Team%20Hunting-C51A4A?style=flat-square" />
 </p>
 
 <p align="center">
@@ -18,11 +18,8 @@
 
 # SliverBane
 
-**Counter-C2 deception engine for Blue Teams.** Spawns fake Sliver implant sessions that are indistinguishable from real ones — burning the operator's time, polluting their data, and triggering alerts on every interaction.
+**Counter-C2 framework built to attack Red Teams.** SliverBane connects to an active Sliver C2 server and spawns fake implant sessions that are indistinguishable from real ones. It serves as an active defense tool to burn the operator's time and pollute their database, and as a **Proof Of Concept (PoC) for Denial of Service (DoS) attacks** to completely shut down the C2 server.
 
-> **⚠️ Legal Notice:** This tool is designed for **authorized defensive operations only.** Use it against infrastructure you own or have explicit written permission to test. Unauthorized use against third-party systems is illegal.
-
----
 
 ## What It Does
 
@@ -30,11 +27,12 @@ SliverBane connects to a Sliver C2 server using stolen mTLS credentials and regi
 
 | Capability | Details |
 |---|---|
+| **DoS Modules** | Pluggable attack modules for service disruption (nil-deref panic, OOM) |
 | **Realistic Identity** | Corporate hostnames (`srv-web-03`, `DESKTOP-A7K9M2P`), OS-appropriate usernames, valid MAC/IP, randomized PIDs |
 | **Rich Filesystem** | 150+ files on Linux, 100+ on Windows — `/etc/passwd`, `/proc/cpuinfo`, `C:\Windows\System32` DLLs, browser profiles, honeypot `passwords.txt` |
 | **Proper Protocol** | 50+ Sliver message types handled with correct protobuf responses — `ps`, `ls`, `ifconfig`, `netstat`, `env`, `whoami`, `download`, `upload`, `screenshot`, and more |
 | **Anti-Detection** | 50–500ms response jitter, randomized keepalive intervals, `UnknownMessageType` for unsupported commands (exactly what real implants do) |
-| **DoS Modules** | Pluggable attack modules for service disruption (nil-deref panic, OOM) |
+
 
 
 ---
