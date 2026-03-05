@@ -1,0 +1,1034 @@
+syntax = "proto3";
+package sliverpb;
+option go_package = "sliverbane/protobuf/sliverpb";
+
+message Request {
+  bool Async = 1;
+  int64 Timeout = 2;
+  string BeaconID = 8;
+  string SessionID = 9;
+}
+
+message Response {
+  string Err = 1;
+  bool Async = 2;
+  string BeaconID = 8;
+  string TaskID = 9;
+}
+
+message Envelope {
+  int64 ID = 1;
+  uint32 Type = 2;
+  bytes Data = 3;
+  bool UnknownMessageType = 4;
+}
+
+// ──────────── Registration ────────────
+
+message Register {
+  string Name = 1;
+  string Hostname = 2;
+  string Uuid = 3;
+  string Username = 4;
+  string Uid = 5;
+  string Gid = 6;
+  string Os = 7;
+  string Arch = 8;
+  int32 Pid = 9;
+  string Filename = 10;
+  string ActiveC2 = 11;
+  string Version = 12;
+  int64 ReconnectInterval = 13;
+  string ProxyURL = 14;
+  string ConfigID = 16;
+  int64 PeerID = 17;
+  string Locale = 18;
+}
+
+message BeaconRegister {
+  string ID = 1;
+  int64 Interval = 2;
+  int64 Jitter = 3;
+  Register Register = 4;
+  int64 NextCheckin = 5;
+}
+
+message BeaconTasks {
+  string ID = 1;
+  repeated Envelope Tasks = 2;
+  int64 NextCheckin = 3;
+}
+
+// ──────────── Ping ────────────
+
+message Ping {
+  int32 Nonce = 1;
+  Response Response = 8;
+  Request Request = 9;
+}
+
+// ──────────── Kill ────────────
+
+message KillReq {
+  bool Force = 1;
+  Request Request = 9;
+}
+
+// ──────────── Filesystem ────────────
+
+message FileInfo {
+  string Name = 1;
+  bool IsDir = 2;
+  int64 Size = 3;
+  int64 ModTime = 4;
+  string Mode = 5;
+  string Link = 6;
+  string Uid = 7;
+  string Gid = 8;
+}
+
+message LsReq {
+  string Path = 1;
+  Request Request = 9;
+}
+
+message Ls {
+  string Path = 1;
+  bool Exists = 2;
+  repeated FileInfo Files = 3;
+  string timezone = 4;
+  int32 timezoneOffset = 5;
+  Response Response = 9;
+}
+
+message CdReq {
+  string Path = 1;
+  Request Request = 9;
+}
+
+message PwdReq {
+  Request Request = 9;
+}
+
+message Pwd {
+  string Path = 1;
+  Response Response = 9;
+}
+
+message RmReq {
+  string Path = 1;
+  bool Recursive = 2;
+  bool Force = 3;
+  Request Request = 9;
+}
+
+message Rm {
+  string Path = 1;
+  Response Response = 9;
+}
+
+message MkdirReq {
+  string Path = 1;
+  Request Request = 9;
+}
+
+message Mkdir {
+  string Path = 1;
+  Response Response = 9;
+}
+
+message MvReq {
+  string Src = 1;
+  string Dst = 2;
+  Request Request = 9;
+}
+
+message Mv {
+  string Src = 1;
+  string Dst = 2;
+  Response Response = 9;
+}
+
+message CpReq {
+  string Src = 1;
+  string Dst = 2;
+  Request Request = 9;
+}
+
+message Cp {
+  string Src = 1;
+  string Dst = 2;
+  int64 BytesWritten = 3;
+  Response Response = 9;
+}
+
+message ChmodReq {
+  string Path = 1;
+  string FileMode = 2;
+  bool Recursive = 3;
+  Request Request = 9;
+}
+
+message Chmod {
+  string Path = 1;
+  Response Response = 9;
+}
+
+message ChownReq {
+  string Path = 1;
+  string Uid = 2;
+  string Gid = 3;
+  bool Recursive = 4;
+  Request Request = 9;
+}
+
+message Chown {
+  string Path = 1;
+  Response Response = 9;
+}
+
+message ChtimesReq {
+  string Path = 1;
+  int64 ATime = 2;
+  int64 MTime = 3;
+  Request Request = 9;
+}
+
+message Chtimes {
+  string Path = 1;
+  Response Response = 9;
+}
+
+message DownloadReq {
+  string Path = 1;
+  int64 Start = 2;
+  int64 Stop = 3;
+  bool Recurse = 4;
+  int64 MaxBytes = 5;
+  int64 MaxLines = 6;
+  bool RestrictedToFile = 7;
+  Request Request = 9;
+}
+
+message Download {
+  string Path = 1;
+  string Encoder = 2;
+  bool Exists = 3;
+  int64 Start = 4;
+  int64 Stop = 5;
+  bytes Data = 6;
+  bool IsDir = 7;
+  int32 ReadFiles = 8;
+  int32 UnreadableFiles = 10;
+  Response Response = 9;
+}
+
+message UploadReq {
+  string Path = 1;
+  string Encoder = 2;
+  bytes Data = 3;
+  bool IsIOC = 4;
+  string FileName = 5;
+  bool IsDirectory = 6;
+  bool Overwrite = 7;
+  Request Request = 9;
+}
+
+message Upload {
+  string Path = 1;
+  int32 WrittenFiles = 2;
+  int32 UnwriteableFiles = 3;
+  Response Response = 9;
+}
+
+// ──────────── Process ────────────
+
+message Process {
+  int32 Pid = 1;
+  int32 Ppid = 2;
+  string Executable = 3;
+  string Owner = 4;
+  string Architecture = 7;
+  int32 SessionID = 5;
+  repeated string CmdLine = 6;
+}
+
+message PsReq {
+  bool FullInfo = 1;
+  Request Request = 9;
+}
+
+message Ps {
+  repeated Process Processes = 1;
+  Response Response = 9;
+}
+
+message TerminateReq {
+  int32 Pid = 1;
+  bool Force = 2;
+  Request Request = 9;
+}
+
+message Terminate {
+  int32 Pid = 1;
+  Response Response = 9;
+}
+
+// ──────────── Execute ────────────
+
+message ExecuteReq {
+  string Path = 1;
+  repeated string Args = 2;
+  bool Output = 3;
+  string Stdout = 4;
+  string Stderr = 5;
+  bool EnvInheritance = 6;
+  map<string, string> Env = 7;
+  bool Background = 8;
+  uint32 PPid = 10;
+  Request Request = 9;
+}
+
+message Execute {
+  uint32 Status = 1;
+  bytes Stdout = 2;
+  bytes Stderr = 3;
+  uint32 Pid = 4;
+  Response Response = 9;
+}
+
+// ──────────── Network ────────────
+
+message IfconfigReq {
+  Request Request = 9;
+}
+
+message NetInterface {
+  int32 Index = 1;
+  string Name = 2;
+  string MAC = 3;
+  repeated string IPAddresses = 4;
+}
+
+message Ifconfig {
+  repeated NetInterface NetInterfaces = 1;
+  Response Response = 9;
+}
+
+message NetstatReq {
+  bool TCP = 1;
+  bool UDP = 2;
+  bool IP4 = 3;
+  bool IP6 = 5;
+  bool Listening = 6;
+  Request Request = 9;
+}
+
+message SockTabEntry {
+  message SockAddr {
+    string Ip = 1;
+    uint32 Port = 2;
+  }
+  SockAddr LocalAddr = 1;
+  SockAddr RemoteAddr = 2;
+  string SkState = 3;
+  uint32 UID = 4;
+  Process Process = 5;
+  string Protocol = 6;
+}
+
+message Netstat {
+  repeated SockTabEntry Entries = 1;
+  Response Response = 9;
+}
+
+// ──────────── Environment ────────────
+
+message EnvVar {
+  string Key = 1;
+  string Value = 2;
+}
+
+message EnvReq {
+  string Name = 1;
+  Request Request = 9;
+}
+
+message EnvInfo {
+  repeated EnvVar Variables = 1;
+  Response Response = 9;
+}
+
+message SetEnvReq {
+  EnvVar Variable = 1;
+  Request Request = 9;
+}
+
+message SetEnv {
+  Response Response = 9;
+}
+
+message UnsetEnvReq {
+  string Name = 1;
+  Request Request = 9;
+}
+
+message UnsetEnv {
+  Response Response = 9;
+}
+
+// ──────────── Screenshot ────────────
+
+message ScreenshotReq {
+  Request Request = 9;
+}
+
+message Screenshot {
+  bytes Data = 1;
+  Response Response = 9;
+}
+
+// ──────────── Reconfigure ────────────
+
+message ReconfigureReq {
+  int64 ReconnectInterval = 1;
+  int64 BeaconInterval = 2;
+  int64 BeaconJitter = 3;
+  string C2URI = 4;
+  Request Request = 9;
+}
+
+message Reconfigure {
+  Response Response = 9;
+}
+
+// ──────────── Token / Whoami ────────────
+
+message CurrentTokenOwnerReq {
+  Request Request = 9;
+}
+
+message CurrentTokenOwner {
+  string Output = 1;
+  Response Response = 9;
+}
+
+// ──────────── Impersonate ────────────
+
+message ImpersonateReq {
+  string Username = 1;
+  Request Request = 9;
+}
+
+message Impersonate {
+  Response Response = 9;
+}
+
+message RevToSelfReq {
+  Request Request = 9;
+}
+
+message RevToSelf {
+  Response Response = 9;
+}
+
+// ──────────── Shell ────────────
+
+message ShellReq {
+  string Path = 1;
+  bool EnablePTY = 2;
+  uint32 Pid = 3;
+  uint64 TunnelID = 8;
+  Request Request = 9;
+}
+
+message Shell {
+  string Path = 1;
+  uint32 Pid = 3;
+  uint64 TunnelID = 8;
+  Response Response = 9;
+}
+
+// ──────────── Tunnel ────────────
+
+message TunnelData {
+  bytes Data = 1;
+  bool Closed = 2;
+  uint64 Sequence = 3;
+  uint64 Ack = 4;
+  bool Resend = 5;
+  bool CreateReverse = 6;
+  // rportfwd
+  message RportFwdData {
+    int32 BindPort = 1;
+    int32 TargetPort = 2;
+    string TargetHost = 3;
+  }
+  RportFwdData rportfwd = 7;
+  uint64 TunnelID = 8;
+  uint32 SessionID = 9;
+}
+
+// ──────────── Misc Stubs ────────────
+
+message TaskReq {
+  string Encoder = 1;
+  bool RWXPages = 2;
+  uint32 Pid = 3;
+  bytes Data = 4;
+  Request Request = 9;
+}
+
+message Task {
+  Response Response = 9;
+}
+
+message ProcessDumpReq {
+  int32 Pid = 1;
+  int32 Timeout = 2;
+  Request Request = 9;
+}
+
+message ProcessDump {
+  bytes Data = 1;
+  Response Response = 9;
+}
+
+message MakeTokenReq {
+  string Username = 1;
+  string Password = 2;
+  string Domain = 3;
+  uint32 LogonType = 4;
+  Request Request = 9;
+}
+
+message MakeToken {
+  Response Response = 9;
+}
+
+// ──────────── Sessions ────────────
+
+message OpenSession {
+  repeated string C2s = 1;
+  int64 Delay = 2;
+  Response Response = 8;
+  Request Request = 9;
+}
+
+message CloseSession {
+  Response Response = 8;
+  Request Request = 9;
+}
+
+// ──────────── Grep ────────────
+
+message GrepReq {
+  string SearchPattern = 1;
+  string Path = 2;
+  bool Recursive = 3;
+  int32 LinesBefore = 4;
+  int32 LinesAfter = 5;
+  Request Request = 9;
+}
+
+message GrepLinePosition {
+  int32 Start = 1;
+  int32 End = 2;
+}
+
+message GrepResult {
+  int64 LineNumber = 1;
+  repeated GrepLinePosition Positions = 2;
+  string Line = 3;
+  repeated string LinesBefore = 4;
+  repeated string LinesAfter = 5;
+}
+
+message GrepResultsForFile {
+  repeated GrepResult FileResults = 1;
+  bool IsBinary = 2;
+}
+
+message Grep {
+  map<string, GrepResultsForFile> Results = 1;
+  string SearchPathAbsolute = 2;
+  Response Response = 9;
+}
+
+// ──────────── Mounts ────────────
+
+message MountReq {
+  Request Request = 9;
+}
+
+message MountInfo {
+  string VolumeName = 1;
+  string VolumeType = 2;
+  string MountPoint = 3;
+  string Label = 4;
+  string FileSystem = 5;
+  uint64 UsedSpace = 6;
+  uint64 FreeSpace = 7;
+  uint64 TotalSpace = 8;
+  string MountOptions = 9;
+}
+
+message Mount {
+  repeated MountInfo Info = 1;
+  Response Response = 9;
+}
+
+// ──────────── Pivots ────────────
+
+message PivotStartListenerReq {
+  int32 Type = 1;
+  string BindAddress = 2;
+  repeated bool Stages = 3;
+  Request Request = 9;
+}
+
+message PivotStopListenerReq {
+  uint32 ID = 1;
+  Request Request = 9;
+}
+
+message PivotListenersReq {
+  Request Request = 9;
+}
+
+message PivotListener {
+  uint32 ID = 1;
+  int32 Type = 2;
+  string BindAddress = 3;
+  repeated int64 Pivots = 4;
+}
+
+message PivotListeners {
+  repeated PivotListener Listeners = 1;
+  Response Response = 9;
+}
+
+message PivotPing {
+  int32 Nonce = 1;
+}
+
+// ──────────── Services ────────────
+
+message StartServiceReq {
+  string ServiceName = 1;
+  string ServiceDescription = 2;
+  string BinPath = 3;
+  string Hostname = 4;
+  string Arguments = 5;
+  Request Request = 9;
+}
+
+message ServiceInfo {
+  Response Response = 9;
+}
+
+message StopServiceReq {
+  string ServiceName = 1;
+  string Hostname = 2;
+  Request Request = 9;
+}
+
+message RemoveServiceReq {
+  string ServiceName = 1;
+  string Hostname = 2;
+  Request Request = 9;
+}
+
+// ──────────── Registry (Windows) ────────────
+
+message RegistryReadReq {
+  string Hive = 1;
+  string Path = 2;
+  string Key = 3;
+  string Hostname = 4;
+  Request Request = 9;
+}
+
+message RegistryRead {
+  string Value = 1;
+  Response Response = 9;
+}
+
+message RegistryWriteReq {
+  string Hive = 1;
+  string Path = 2;
+  string Key = 3;
+  string Hostname = 4;
+  string StringValue = 5;
+  bytes ByteValue = 6;
+  uint32 DWordValue = 7;
+  uint64 QWordValue = 8;
+  uint32 Type = 10;
+  Request Request = 9;
+}
+
+message RegistryWrite {
+  Response Response = 9;
+}
+
+message RegistryCreateKeyReq {
+  string Hive = 1;
+  string Path = 2;
+  string Key = 3;
+  string Hostname = 4;
+  Request Request = 9;
+}
+
+message RegistryCreateKey {
+  Response Response = 9;
+}
+
+message RegistryDeleteKeyReq {
+  string Hive = 1;
+  string Path = 2;
+  string Key = 3;
+  string Hostname = 4;
+  Request Request = 9;
+}
+
+message RegistryDeleteKey {
+  Response Response = 9;
+}
+
+message RegistrySubKeyListReq {
+  string Hive = 1;
+  string Path = 2;
+  string Hostname = 4;
+  Request Request = 9;
+}
+
+message RegistrySubKeyList {
+  repeated string Subkeys = 1;
+  Response Response = 9;
+}
+
+message RegistryListValuesReq {
+  string Hive = 1;
+  string Path = 2;
+  string Hostname = 4;
+  Request Request = 9;
+}
+
+message RegistryValuesList {
+  repeated string ValueNames = 1;
+  Response Response = 9;
+}
+
+// ──────────── Extensions (stubs) ────────────
+
+message RegisterExtensionReq {
+  string Name = 1;
+  bytes Data = 2;
+  string OS = 3;
+  string Init = 4;
+  Request Request = 9;
+}
+
+message RegisterExtension {
+  Response Response = 9;
+}
+
+message CallExtensionReq {
+  string Name = 1;
+  string Export = 2;
+  bytes Args = 3;
+  Request Request = 9;
+}
+
+message CallExtension {
+  bytes Output = 1;
+  Response Response = 9;
+}
+
+message ListExtensionsReq {
+  Request Request = 9;
+}
+
+message ListExtensions {
+  repeated string Names = 1;
+  Response Response = 9;
+}
+
+// ──────────── WireGuard (stubs) ────────────
+
+message WGPortForwardStartReq {
+  int32 LocalPort = 1;
+  string RemoteAddress = 2;
+  Request Request = 9;
+}
+
+message WGPortForwarder {
+  int32 ID = 1;
+  string LocalAddr = 2;
+  string RemoteAddr = 3;
+}
+
+message WGPortForward {
+  WGPortForwarder Forwarder = 1;
+  Response Response = 9;
+}
+
+message WGPortForwardStopReq {
+  int32 ID = 1;
+  Request Request = 9;
+}
+
+message WGSocksStartReq {
+  int32 Port = 1;
+  Request Request = 9;
+}
+
+message WGSocksServer {
+  int32 ID = 1;
+  string LocalAddr = 2;
+}
+
+message WGSocks {
+  WGSocksServer Server = 1;
+  Response Response = 9;
+}
+
+message WGSocksStopReq {
+  int32 ID = 1;
+  Request Request = 9;
+}
+
+message WGTCPForwardersReq {
+  Request Request = 9;
+}
+
+message WGSocksServersReq {
+  Request Request = 9;
+}
+
+// ──────────── Sideload ────────────
+
+message SideloadReq {
+  bytes Data = 1;
+  string ProcessName = 2;
+  repeated string Args = 3;
+  string EntryPoint = 4;
+  bool Kill = 5;
+  bool isDLL = 6;
+  bool isUnicode = 7;
+  uint32 PPid = 10;
+  repeated string ProcessArgs = 11;
+  Request Request = 9;
+}
+
+message Sideload {
+  string Result = 1;
+  Response Response = 9;
+}
+
+// ──────────── Execute Assembly ────────────
+
+message ExecuteAssemblyReq {
+  bytes Assembly = 1;
+  repeated string Arguments = 2;
+  string Process = 3;
+  bool IsDLL = 4;
+  string Arch = 5;
+  string ClassName = 6;
+  string Method = 7;
+  string AppDomain = 8;
+  uint32 PPid = 10;
+  repeated string ProcessArgs = 11;
+  bool InProcess = 12;
+  string Runtime = 13;
+  bool AmsiBypass = 14;
+  bool EtwBypass = 15;
+  Request Request = 9;
+}
+
+message ExecuteAssembly {
+  bytes Output = 1;
+  Response Response = 9;
+}
+
+// ──────────── SpawnDll ────────────
+
+message SpawnDllReq {
+  bytes Data = 1;
+  string ProcessName = 2;
+  uint32 Offset = 3;
+  repeated string Args = 4;
+  bool Kill = 5;
+  uint32 PPid = 10;
+  repeated string ProcessArgs = 11;
+  Request Request = 9;
+}
+
+message SpawnDll {
+  string Result = 1;
+  Response Response = 9;
+}
+
+// ──────────── SSH ────────────
+
+message SSHCommandReq {
+  string Username = 1;
+  string Hostname = 2;
+  uint32 Port = 3;
+  string Command = 4;
+  string Password = 5;
+  bytes PrivKey = 6;
+  Request Request = 9;
+}
+
+message SSHCommand {
+  bytes StdOut = 1;
+  bytes StdErr = 2;
+  Response Response = 9;
+}
+
+// ──────────── Portfwd / Rportfwd ────────────
+
+message PortfwdReq {
+  int32 Port = 1;
+  int32 Protocol = 2;
+  string Host = 3;
+  uint64 TunnelID = 8;
+  Request Request = 9;
+}
+
+message Portfwd {
+  int32 Port = 1;
+  int32 Protocol = 2;
+  string Host = 3;
+  uint64 TunnelID = 8;
+  Response Response = 9;
+}
+
+message Privileges {
+  string Info = 1;
+  Response Response = 9;
+}
+
+message GetPrivsReq {
+  Request Request = 9;
+}
+
+// ──────────── RunAs ────────────
+
+message RunAsReq {
+  string Username = 1;
+  string ProcessName = 2;
+  string Args = 3;
+  string Domain = 4;
+  string Password = 5;
+  bool HideWindow = 6;
+  bool NetOnly = 7;
+  Request Request = 9;
+}
+
+message RunAs {
+  string Output = 1;
+  Response Response = 9;
+}
+
+// ──────────── InvokeGetSystem ────────────
+
+message InvokeGetSystemReq {
+  bytes Data = 1;
+  string HostingProcess = 2;
+  Request Request = 9;
+}
+
+message GetSystem {
+  Response Response = 9;
+}
+
+// ──────────── InvokeMigrate ────────────
+
+message InvokeMigrateReq {
+  uint32 Pid = 1;
+  bytes Data = 2;
+  string ProcName = 3;
+  Request Request = 9;
+}
+
+message Migrate {
+  bool Success = 1;
+  uint32 Pid = 2;
+  Response Response = 9;
+}
+
+// ──────────── Memfiles ────────────
+
+message MemfilesListReq {
+  Request Request = 9;
+}
+
+message MemfilesAddReq {
+  Request Request = 9;
+}
+
+message MemfilesAdd {
+  int64 Fd = 1;
+  Response Response = 9;
+}
+
+message MemfilesRmReq {
+  int64 Fd = 1;
+  Request Request = 9;
+}
+
+message MemfilesRm {
+  int64 Fd = 1;
+  Response Response = 9;
+}
+
+// ──────────── Socksdata ────────────
+
+message SocksData {
+  bool CloseConn = 1;
+  string Username = 2;
+  string Password = 3;
+  bytes Data = 4;
+  uint64 Sequence = 5;
+  uint64 TunnelID = 8;
+  Request Request = 9;
+}
+
+// ──────────── RPortfwd ────────────
+
+message RportFwdStartListenerReq {
+  string BindAddress = 1;
+  int32 BindPort = 2;
+  int32 ForwardPort = 3;
+  string ForwardAddress = 4;
+  Request Request = 9;
+}
+
+message RportFwdListener {
+  string BindAddress = 1;
+  int32 ForwardPort = 2;
+  string ForwardAddress = 3;
+  int32 ID = 4;
+  Response Response = 9;
+}
+
+message RportFwdStopListenerReq {
+  int32 ID = 1;
+  Request Request = 9;
+}
+
+message RportFwdListenersReq {
+  Request Request = 9;
+}
+
+message RportFwdListeners {
+  repeated RportFwdListener Listeners = 1;
+  Response Response = 9;
+}
+
+message RPortfwdReq {
+  uint64 TunnelID = 8;
+  Request Request = 9;
+}
