@@ -33,6 +33,18 @@ SliverBane connects to a Sliver C2 server using stolen mTLS credentials and regi
 | **Proper Protocol** | 50+ Sliver message types handled with correct protobuf responses — `ps`, `ls`, `ifconfig`, `netstat`, `env`, `whoami`, `download`, `upload`, `screenshot`, and more |
 | **Anti-Detection** | 50–500ms response jitter, randomized keepalive intervals, `UnknownMessageType` for unsupported commands (exactly what real implants do) |
 
+---
+
+## Denial of Service (DoS) Modules
+SliverBane includes pluggable Denial of Service modules designed to disrupt target C2 infrastructure by exploiting known vulnerabilities in the Sliver server.
+
+| Module | Description | Vulnerable Versions | CVE |
+|--------|-------------|---------------------|-----|
+| `nil` | Nil-pointer dereference panic during envelope parsing. | `<= v1.7.3` | **CVE-2026-29781** |
+| `oom` | Out-of-Memory (OOM) crash via excessive length prefix allocation. | `<= v1.7.3` | N/A |
+
+Run `dos list` to see available modules, and `dos run <module>` to deploy a payload.
+
 
 
 ---
@@ -124,18 +136,6 @@ When an operator interacts with a ghost session, they get:
 - **`screenshot`** — Returns a valid (black) PNG image
 
 Any unrecognized command returns `UnknownMessageType` — the same behavior as a real implant.
-
----
-
-## Denial of Service (DoS) Modules
-SliverBane includes pluggable Denial of Service modules designed to disrupt target C2 infrastructure by exploiting known vulnerabilities in the Sliver server.
-
-| Module | Description | Vulnerable Versions | CVE |
-|--------|-------------|---------------------|-----|
-| `nil` | Nil-pointer dereference panic during envelope parsing. | `<= v1.7.3` | **CVE-2026-29781** |
-| `oom` | Out-of-Memory (OOM) crash via excessive length prefix allocation. | `<= v1.7.3` | N/A |
-
-Run `dos list` to see available modules, and `dos run <module>` to deploy a payload.
 
 ---
 
