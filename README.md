@@ -18,8 +18,7 @@
 
 # SliverBane
 
-**Counter-C2 framework built to attack Red Teams.** SliverBane connects to an active Sliver C2 server and spawns fake implant sessions that are indistinguishable from real ones. It serves as an active defense tool to burn the operator's time and pollute their database, and as a **Proof Of Concept (PoC) for Denial of Service (DoS) attacks** to completely shut down the C2 server.
-
+**Counter-C2 framework built to attack Red Teams**. SliverBane connects to an active Sliver C2 server and spawns fake implant sessions that are indistinguishable from real ones. It serves as an active defense tool to burn the operator's time and pollute their database, a honeybot trap to gain intelligence on an attacker's intent and next moves, and a Proof Of Concept (PoC) for Denial of Service (DoS) attacks to completely shut down the C2 server.
 
 ## What It Does
 
